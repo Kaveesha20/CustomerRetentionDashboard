@@ -1,0 +1,8 @@
+﻿pandas
+sqlalchemy
+pyodbc
+python-dotenv
+matplotlib
+seaborn
+scipy
+jupyter
