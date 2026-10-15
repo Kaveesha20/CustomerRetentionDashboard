@@ -1,6 +1,6 @@
 # src/stats_analysis.py
 # Job: deeper statistical analysis that SQL alone doesn't do well -
-# correlation, cohort/retention, and a significance test.
+# correlation, retention, and a significance test.
 # Reads from SQL Server (the same tables load_db.py created).
 
 import pandas as pd
@@ -35,11 +35,11 @@ def correlation_delivery_vs_review():
     return df, correlation
 
 
-def cohort_retention():
+def retention_analysis():
     """
     Question: what % of customers come back and order again?
     Uses customer_unique_id (the real person), not customer_id
-    (which is one-per-order) - this matters, as we noted earlier.
+    (which is created again for every order).
     """
     query = """
     SELECT c.customer_unique_id, o.order_id, o.order_purchase_timestamp
@@ -62,11 +62,11 @@ def cohort_retention():
     return orders_per_customer, retention_rate
 
 
-def ab_test_payment_type():
+def payment_type_ttest():
     """
-    Question: do credit card payers spend significantly more per order
-    than boleto payers? This is the same t-test pattern from Level 3
-    theory, applied to a real business comparison.
+    Question: do credit card payments have a higher average value
+    than boleto payments? Each row in the payments table is one
+    payment, so this compares payments, not orders.
     """
     query = """
     SELECT payment_type, payment_value
@@ -99,8 +99,8 @@ if __name__ == "__main__":
     print("=== Correlation: Delivery Time vs Review Score ===")
     correlation_delivery_vs_review()
 
-    print("\n=== Cohort / Retention Analysis ===")
-    cohort_retention()
+    print("\n=== Retention Analysis ===")
+    retention_analysis()
 
-    print("\n=== A/B Test: Credit Card vs Boleto Payment Value ===")
-    ab_test_payment_type()
+    print("\n=== T-test: Credit Card vs Boleto Payment Value ===")
+    payment_type_ttest()
