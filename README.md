@@ -50,7 +50,7 @@ CSV → Python cleaning → SQL Server → Power BI
 1. **CSV:** the public Olist dataset (see Data credit). The raw files are not included in this repo.
 2. **Python cleaning (pandas):** `src/ingest.py` reads 8 of the 9 CSV files (the large geolocation file is skipped because the KPIs do not need it). `src/clean.py` cleans each table: it removes duplicate rows (none were found, so no rows were lost), turns date columns into real dates, turns price and payment columns into numbers, standardizes text (lowercase cities, uppercase state codes, trimmed spaces), fills missing review comments with empty text, labels products with no category as "unknown", and fills missing product weights and sizes with the column median.
 3. **SQL Server:** `src/load_db.py` loads the 8 cleaned tables into the `olist_analytics` database. `sql/01_kpis.sql` holds 7 KPI queries in T-SQL.
-4. **Python statistics:** `src/stats_analysis.py` runs the correlation, the cohort and retention analysis, and a t-test.
+4. **Python statistics:** `src/stats_analysis.py` runs the correlation, the cohort , retention analysis and a t-test.
 5. **Power BI:** connects to SQL Server. The model links 8 tables (customers, orders, order items, payments, reviews, products, sellers, category translation) with one-to-many relationships. The report logic is written in DAX:
    - Measures: `Unique Customers`, `Repeat Customers`, `Retention Rate`, `Repeat Revenue Share`, `Average Review Score`
    - Calculated columns: `Delivery Days`, `Delivery Bucket`, `Customer Type`, `First Order Date`, `First Delivery Bucket`
